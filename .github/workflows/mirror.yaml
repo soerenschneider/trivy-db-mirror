@@ -1,0 +1,41 @@
+---
+name: Mirror Trivy DB Docker Image
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+env:
+  GH_REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  mirror-trivy-db:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the gcr registry
+        uses: docker/login-action@v3
+        with:           
+          registry: ${{ env.GH_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up oras
+        uses: oras-project/setup-oras@v1
+
+      - name: Pull Trivy DB Docker Image
+        run: |
+          oras pull aquasec/trivy-db:2
+
+      - name: Tag the Trivy DB Docker Image
+        run: |
+          oras tag aquasec/trivy-db:2 ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}
+
+      - name: Push Trivy DB Docker Image
+        run: |
+          oras push ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}
