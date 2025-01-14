@@ -28,14 +28,6 @@ jobs:
       - name: Set up oras
         uses: oras-project/setup-oras@v1
 
-      - name: Pull Trivy DB Docker Image
+      - name: Copy image
         run: |
-          oras pull ghcr.io/aquasecurity/trivy-db:2
-
-      - name: Tag the Trivy DB Docker Image
-        run: |
-          oras tag ghcr.io/aquasecurity/trivy-db:2 ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:2
-
-      - name: Push Trivy DB Docker Image
-        run: |
-          oras push ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:2
+          oras cp -r ghcr.io/aquasecurity/trivy-db:2 ${{ env.GH_REGISTRY }}/${{ env.IMAGE_NAME }}:2
