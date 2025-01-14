@@ -30,12 +30,12 @@ jobs:
 
       - name: Pull Trivy DB Docker Image
         run: |
-          oras pull aquasec/trivy-db:2
+          oras pull ghcr.io/aquasecurity/trivy-db:2
 
       - name: Tag the Trivy DB Docker Image
         run: |
-          oras tag aquasec/trivy-db:2 ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}
+          oras tag ghcr.io/aquasecurity/trivy-db:2 ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:2
 
       - name: Push Trivy DB Docker Image
         run: |
-          oras push ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}
+          oras push ${{ env.GH_REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:2
